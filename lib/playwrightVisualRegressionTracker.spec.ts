@@ -3,7 +3,7 @@ import {
   VisualRegressionTracker,
 } from "@visual-regression-tracker/sdk-js";
 import { Browser, BrowserContext, Page, chromium } from "playwright";
-import { PlaywrightVisualRegressionTracker, TrackOptions } from "../lib";
+import { PlaywrightVisualRegressionTracker, TrackOptions } from ".";
 import { mocked } from "ts-jest/utils";
 
 describe("playwright", () => {
