@@ -28,7 +28,7 @@ const config: Config = {
     projectId: "76f0c443-9811-4f4f-b1c2-7c01c5775d9a",
 
     // Fill with your data
-    token: "F5Z2H0H2SNMXZVHX0EA4YQM1MGDD",
+    apiKey: "F5Z2H0H2SNMXZVHX0EA4YQM1MGDD",
 };
 
 const vrt = new PlaywrightVisualRegressionTracker(config, browserType);

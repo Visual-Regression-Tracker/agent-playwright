@@ -1,6 +1,6 @@
 {
   "name": "@visual-regression-tracker/agent-playwright",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Visual-Regression-Tracker/agent-playwright#readme",
   "dependencies": {
-    "@visual-regression-tracker/sdk-js": "0.0.7"
+    "@visual-regression-tracker/sdk-js": "0.0.8"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",
