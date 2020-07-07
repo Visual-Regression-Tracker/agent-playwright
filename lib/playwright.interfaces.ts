@@ -13,6 +13,11 @@ export interface PageScreenshotOptions {
    * Hides default white background and allows capturing screenshots with transparency. Not applicable to `jpeg` images. Defaults to `false`.
    */
   omitBackground?: boolean;
+
+  /**
+   * Maximum time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the browserContext.setDefaultTimeout(timeout) or page.setDefaultTimeout(timeout) methods.
+   */
+  timeout?: number;
 }
 
 export interface PageScreenshotOptionsClip {

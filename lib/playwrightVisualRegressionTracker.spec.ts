@@ -16,7 +16,7 @@ describe("playwright", () => {
   const config: Config = {
     apiUrl: "http://localhost:4200",
     branchName: "develop",
-    projectId: "733c148e-ef70-4e6d-9ae5-ab22263697cc",
+    project: "Default project",
     apiKey: "BAZ0EG0PRH4CRQPH19ZKAVADBP9E",
   };
 

@@ -6,7 +6,7 @@
 
 ## Usage
 ### Import
-```
+```js
 import {
   PlaywrightVisualRegressionTracker,
   Config,
@@ -14,27 +14,27 @@ import {
 import { chromium, Browser, Page, BrowserContext } from "playwright";
 ```
 ### Configure connection
-```
+```js
 const browserType = chromium; // any BrowserType supported by Playwright
 
 const config: Config = {
-    // Fill with your data
+    // apiUrl - URL where backend is running 
     apiUrl: "http://localhost:4200",
 
-    // Fill with your data
+    // project - Project name or ID
+    project: "Default project",
+
+    // apiKey - User apiKey
+    apiKey: "tXZVHX0EA4YQM1MGDD",
+
+    // branch - Current git branch 
     branchName: "develop",
-
-    // Fill with your data
-    projectId: "76f0c443-9811-4f4f-b1c2-7c01c5775d9a",
-
-    // Fill with your data
-    apiKey: "F5Z2H0H2SNMXZVHX0EA4YQM1MGDD",
 };
 
 const vrt = new PlaywrightVisualRegressionTracker(config, browserType);
 ```
 ### Navigate to needed page
-```
+```js
 // set up Playwright 
 const browser = await browserType.launch({ headless: false });
 const context = await browser.newContext();
@@ -44,7 +44,7 @@ const page = await context.newPage();
 await page.goto("https://google.com/");
 ```
 ### Send image
-```
+```js
 await vrt.track(page, imageName[, options])
 ```
 * `page` <[Page](https://playwright.dev/#version=v1.0.2&path=docs%2Fapi.md&q=class-page)> Playwright page
