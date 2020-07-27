@@ -1,11 +1,12 @@
 {
   "name": "@visual-regression-tracker/agent-playwright",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "test:cov": "jest --collectCoverage",
     "build": "./node_modules/.bin/tsc"
   },
   "repository": {
@@ -24,11 +25,11 @@
   },
   "homepage": "https://github.com/Visual-Regression-Tracker/agent-playwright#readme",
   "dependencies": {
-    "@visual-regression-tracker/sdk-js": "^3.0.0"
+    "@visual-regression-tracker/sdk-js": "^3.0.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.5",
-    "@types/node": "^14.0.23",
+    "@types/node": "^14.0.26",
     "jest": "^26.1.0",
     "playwright": "^1.2.1",
     "ts-jest": "^26.1.3",
