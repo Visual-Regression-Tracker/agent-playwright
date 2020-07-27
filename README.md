@@ -1,5 +1,8 @@
 # Native integration for [Playwright](https://github.com/microsoft/playwright) with [Visual Regression Tracker](https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker)
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7c9f8095909c4220bff56b66b4cb728d)](https://www.codacy.com/gh/Visual-Regression-Tracker/agent-playwright?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Visual-Regression-Tracker/agent-playwright&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/7c9f8095909c4220bff56b66b4cb728d)](https://www.codacy.com/gh/Visual-Regression-Tracker/agent-playwright?utm_source=github.com&utm_medium=referral&utm_content=Visual-Regression-Tracker/agent-playwright&utm_campaign=Badge_Coverage)
+
 ## Install
 
 `npm install @visual-regression-tracker/agent-playwright`
