@@ -53,7 +53,7 @@ await vrt.track(page, imageName[, options])
 * `page` <[Page](https://playwright.dev/#version=v1.0.2&path=docs%2Fapi.md&q=class-page)> Playwright page
 * `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
 * `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
-* * `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`. Default `1`
+* * `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
 * * `screenshotOptions` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> configuration for Playwrights `screenshot` method
 * * * `fullPage` <[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)> When true, takes a screenshot of the full scrollable page, instead of the currently visibvle viewport. Defaults to `false`.
 * * * `omitBackground` <[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)> Hides default white background and allows capturing screenshots with transparency. Defaults to `false`.
