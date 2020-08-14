@@ -6,12 +6,20 @@ import { Page, Browser, BrowserType } from "playwright";
 import { TrackOptions } from "./playwright.interfaces";
 
 export class PlaywrightVisualRegressionTracker {
-  vrt: VisualRegressionTracker;
-  browser: BrowserType<Browser>;
+  private vrt: VisualRegressionTracker;
+  private browser: BrowserType<Browser>;
 
   constructor(config: Config, browser: BrowserType<Browser>) {
     this.vrt = new VisualRegressionTracker(config);
     this.browser = browser;
+  }
+
+  async start() {
+    return this.vrt.start();
+  }
+
+  async stop() {
+    return this.vrt.stop();
   }
 
   async track(page: Page, name: string, options?: TrackOptions) {
