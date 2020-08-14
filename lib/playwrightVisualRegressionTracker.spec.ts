@@ -6,34 +6,52 @@ import { Browser, BrowserContext, Page, chromium } from "playwright";
 import { PlaywrightVisualRegressionTracker, TrackOptions } from ".";
 import { mocked } from "ts-jest/utils";
 
+let browserType = chromium;
+let browser: Browser;
+let context: BrowserContext;
+let page: Page;
+let vrt: PlaywrightVisualRegressionTracker;
+
+const config: Config = {
+  apiUrl: "http://localhost:4200",
+  branchName: "develop",
+  project: "Default project",
+  apiKey: "BAZ0EG0PRH4CRQPH19ZKAVADBP9E",
+};
+
+beforeAll(async () => {
+  browser = await browserType.launch();
+  context = await browser.newContext({
+    viewport: {
+      width: 1800,
+      height: 1600,
+    },
+  });
+  page = await context.newPage();
+  vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+});
+
+afterAll(async () => {
+  await browser.close();
+});
+
 describe("playwright", () => {
-  let browserType = chromium;
-  let browser: Browser;
-  let context: BrowserContext;
-  let page: Page;
-  let vrt: PlaywrightVisualRegressionTracker;
+  it("start", async () => {
+    const startMock = jest.fn();
+    VisualRegressionTracker.prototype.start = startMock;
 
-  const config: Config = {
-    apiUrl: "http://localhost:4200",
-    branchName: "develop",
-    project: "Default project",
-    apiKey: "BAZ0EG0PRH4CRQPH19ZKAVADBP9E",
-  };
+    await vrt.start();
 
-  beforeAll(async () => {
-    browser = await browserType.launch();
-    context = await browser.newContext({
-      viewport: {
-        width: 1800,
-        height: 1600,
-      },
-    });
-    page = await context.newPage();
-    vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+    expect(startMock).toHaveBeenCalled();
   });
 
-  afterAll(() => {
-    browser.close();
+  it("stop", async () => {
+    const stopMock = jest.fn();
+    VisualRegressionTracker.prototype.stop = stopMock;
+
+    await vrt.stop();
+
+    expect(stopMock).toHaveBeenCalled();
   });
 
   it("track all fields", async () => {
@@ -55,6 +73,7 @@ describe("playwright", () => {
         omitBackground: true,
       },
     };
+    vrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
     const trackMock = jest.fn();
     VisualRegressionTracker.prototype.track = trackMock;
     const pageMocked = mocked(page);
@@ -79,6 +98,7 @@ describe("playwright", () => {
 
   it("track default fields", async () => {
     const imageName = "test name";
+    vrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
     const trackMock = jest.fn();
     VisualRegressionTracker.prototype.track = trackMock;
     const pageMocked = mocked(page);
