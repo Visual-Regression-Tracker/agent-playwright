@@ -40,6 +40,9 @@ const config: Config = {
 
   // branch - Current git branch
   branchName: "develop",
+
+  // enableSoftAssert - Log errors instead of exceptions
+  enableSoftAssert: false,
 };
 
 const vrt = new PlaywrightVisualRegressionTracker(config, browserType);

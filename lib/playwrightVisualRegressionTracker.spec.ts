@@ -17,6 +17,7 @@ const config: Config = {
   branchName: "develop",
   project: "Default project",
   apiKey: "BAZ0EG0PRH4CRQPH19ZKAVADBP9E",
+  enableSoftAssert: false,
 };
 
 beforeAll(async () => {
