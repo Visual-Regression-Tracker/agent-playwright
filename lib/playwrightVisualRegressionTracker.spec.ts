@@ -20,23 +20,23 @@ const config: Config = {
   enableSoftAssert: false,
 };
 
-beforeAll(async () => {
-  browser = await browserType.launch();
-  context = await browser.newContext({
-    viewport: {
-      width: 1800,
-      height: 1600,
-    },
-  });
-  page = await context.newPage();
-  vrt = new PlaywrightVisualRegressionTracker(config, browserType);
-});
-
-afterAll(async () => {
-  await browser.close();
-});
-
 describe("playwright", () => {
+  beforeAll(async () => {
+    browser = await browserType.launch();
+    context = await browser.newContext({
+      viewport: {
+        width: 1800,
+        height: 1600,
+      },
+    });
+    page = await context.newPage();
+    vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
   it("start", async () => {
     const startMock = jest.fn();
     VisualRegressionTracker.prototype.start = startMock;
