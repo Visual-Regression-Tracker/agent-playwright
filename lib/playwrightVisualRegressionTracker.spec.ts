@@ -63,7 +63,7 @@ describe("playwright", () => {
   describe("track", () => {
     let trackMock: jest.Mock<any, any>;
     let pageMocked: MaybeMocked<Page>;
-    const screenshot: Buffer = new Buffer("image mocked");
+    const screenshot: Buffer = Buffer.from("image mocked");
 
     beforeEach(() => {
       vrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
