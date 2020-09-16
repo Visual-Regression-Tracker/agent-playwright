@@ -2,8 +2,11 @@ import {
   VisualRegressionTracker,
   Config,
 } from "@visual-regression-tracker/sdk-js";
-import { Page, Browser, BrowserType } from "playwright";
-import { TrackOptions } from "./playwright.interfaces";
+import { Page, Browser, BrowserType, ElementHandle } from "playwright";
+import {
+  PageTrackOptions,
+  ElementHandleTrackOptions,
+} from "./playwright.interfaces";
 
 export class PlaywrightVisualRegressionTracker {
   private vrt: VisualRegressionTracker;
@@ -22,7 +25,7 @@ export class PlaywrightVisualRegressionTracker {
     return this.vrt.stop();
   }
 
-  async track(page: Page, name: string, options?: TrackOptions) {
+  async trackPage(page: Page, name: string, options?: PageTrackOptions) {
     const viewportSize = page.viewportSize();
     return this.vrt.track({
       name,
@@ -33,6 +36,27 @@ export class PlaywrightVisualRegressionTracker {
       viewport: viewportSize
         ? `${viewportSize.width}x${viewportSize.height}`
         : undefined,
+      os: options?.agent?.os,
+      device: options?.agent?.device,
+      diffTollerancePercent: options?.diffTollerancePercent,
+    });
+  }
+
+  async trackElementHandle(
+    elementHandle: ElementHandle | null,
+    name: string,
+    options?: ElementHandleTrackOptions
+  ) {
+    if (!elementHandle) {
+      throw new Error("ElementHandle is null");
+    }
+    return this.vrt.track({
+      name,
+      imageBase64: (
+        await elementHandle.screenshot(options?.screenshotOptions)
+      ).toString("base64"),
+      browser: this.browser.name(),
+      viewport: options?.agent?.viewport,
       os: options?.agent?.os,
       device: options?.agent?.device,
       diffTollerancePercent: options?.diffTollerancePercent,
