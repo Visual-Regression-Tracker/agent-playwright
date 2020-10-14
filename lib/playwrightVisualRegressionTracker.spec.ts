@@ -9,7 +9,7 @@ import {
   ElementHandleTrackOptions,
 } from ".";
 import { mocked } from "ts-jest/utils";
-import { MaybeMocked } from "ts-jest/dist/util/testing";
+import { MaybeMocked } from "ts-jest/dist/utils/testing";
 
 let browserType = chromium;
 let browser: Browser;
