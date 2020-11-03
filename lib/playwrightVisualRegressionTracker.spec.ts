@@ -78,6 +78,14 @@ describe("playwright", () => {
         const imageName = "test name";
         const trackOptions: PageTrackOptions = {
           diffTollerancePercent: 12.31,
+          ignoreAreas: [
+            {
+              x: 1,
+              y: 2,
+              width: 300,
+              height: 400,
+            },
+          ],
           agent: {
             os: "OS",
             device: "device ",
@@ -107,6 +115,7 @@ describe("playwright", () => {
           os: trackOptions.agent?.os,
           device: trackOptions.agent?.device,
           diffTollerancePercent: trackOptions.diffTollerancePercent,
+          ignoreAreas: trackOptions.ignoreAreas,
         });
       });
 
@@ -134,6 +143,14 @@ describe("playwright", () => {
         const imageName = "test name";
         const trackOptions: ElementHandleTrackOptions = {
           diffTollerancePercent: 12.31,
+          ignoreAreas: [
+            {
+              x: 1,
+              y: 2,
+              width: 300,
+              height: 400,
+            },
+          ],
           agent: {
             os: "OS",
             device: "device ",
@@ -164,6 +181,7 @@ describe("playwright", () => {
           os: trackOptions.agent?.os,
           device: trackOptions.agent?.device,
           diffTollerancePercent: trackOptions.diffTollerancePercent,
+          ignoreAreas: trackOptions.ignoreAreas,
         });
       });
 

@@ -39,6 +39,7 @@ export class PlaywrightVisualRegressionTracker {
       os: options?.agent?.os,
       device: options?.agent?.device,
       diffTollerancePercent: options?.diffTollerancePercent,
+      ignoreAreas: options?.ignoreAreas,
     });
   }
 
@@ -60,6 +61,7 @@ export class PlaywrightVisualRegressionTracker {
       os: options?.agent?.os,
       device: options?.agent?.device,
       diffTollerancePercent: options?.diffTollerancePercent,
+      ignoreAreas: options?.ignoreAreas,
     });
   }
 }

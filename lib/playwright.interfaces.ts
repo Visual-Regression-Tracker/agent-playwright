@@ -1,3 +1,5 @@
+import { IgnoreArea } from "@visual-regression-tracker/sdk-js";
+
 export interface ElementHandleScreenshotOptions {
   /**
    * Hides default white background and allows capturing screenshots with transparency. Not applicable to `jpeg` images. Defaults to `false`.
@@ -62,12 +64,14 @@ export interface Agent {
 
 export interface PageTrackOptions {
   diffTollerancePercent?: number;
+  ignoreAreas?: IgnoreArea[];
   screenshotOptions?: PageScreenshotOptions;
   agent?: Agent;
 }
 
 export interface ElementHandleTrackOptions {
   diffTollerancePercent?: number;
+  ignoreAreas?: IgnoreArea[];
   screenshotOptions?: ElementHandleScreenshotOptions;
   agent?: Agent;
 }
