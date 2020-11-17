@@ -29,20 +29,29 @@ import { chromium, Browser, Page, BrowserContext } from "playwright";
 const browserType = chromium; // any BrowserType supported by Playwright
 
 const config: Config = {
-  // apiUrl - URL where backend is running
+  // URL where backend is running
+  // Required
   apiUrl: "http://localhost:4200",
 
-  // project - Project name or ID
+  // Project name or ID
+  // Required
   project: "Default project",
 
-  // apiKey - User apiKey
+  // User apiKey
+  // Required
   apiKey: "tXZVHX0EA4YQM1MGDD",
 
-  // branch - Current git branch
+  // Current git branch
+  // Required
   branchName: "develop",
 
-  // enableSoftAssert - Log errors instead of exceptions
-  enableSoftAssert: false,
+  // Log errors instead of throwing exceptions
+  // Optional - default false
+  enableSoftAssert: true,
+
+  // Unique ID related to one CI build
+  // Optional - default null
+  ciBuildId: "SOME_UNIQUE_ID",
 };
 
 const vrt = new PlaywrightVisualRegressionTracker(config, browserType);
