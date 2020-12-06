@@ -25,6 +25,8 @@ import { chromium, Browser, Page, BrowserContext } from "playwright";
 
 ### Configure connection
 
+#### Explicit config from code
+
 ```js
 const browserType = chromium; // any BrowserType supported by Playwright
 
@@ -55,6 +57,35 @@ const config: Config = {
 };
 
 const vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+```
+
+#### Or, as JSON config file `vrt.json`
+
+_Used only if not explicit config provided_
+_Is overriden if ENV variables are present_
+
+```json
+{
+  "apiUrl": "http://localhost:4200",
+  "project": "Default project",
+  "apiKey": "tXZVHX0EA4YQM1MGDD",
+  "ciBuildId": "commit_sha",
+  "branchName": "develop",
+  "enableSoftAssert": false
+}
+```
+
+#### Or, as environment variables
+
+_Used only if not explicit config provided_
+
+```
+VRT_APIURL="http://localhost:4200"
+VRT_PROJECT="Default project"
+VRT_APIKEY="tXZVHX0EA4YQM1MGDD"
+VRT_CIBUILDID="commit_sha"
+VRT_BRANCHNAME="develop"
+VRT_ENABLESOFTASSERT=true
 ```
 
 ### Setup
