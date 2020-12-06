@@ -56,7 +56,7 @@ const config: Config = {
   ciBuildId: "SOME_UNIQUE_ID",
 };
 
-const vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+const vrt = new PlaywrightVisualRegressionTracker(browserType, config);
 ```
 
 #### Or, as JSON config file `vrt.json`

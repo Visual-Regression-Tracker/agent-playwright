@@ -34,7 +34,7 @@ beforeAll(async () => {
     },
   });
   page = await context.newPage();
-  vrt = new PlaywrightVisualRegressionTracker(config, browserType);
+  vrt = new PlaywrightVisualRegressionTracker(browserType, config);
 });
 
 afterAll(async () => {

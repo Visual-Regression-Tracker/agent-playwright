@@ -12,7 +12,7 @@ export class PlaywrightVisualRegressionTracker {
   private vrt: VisualRegressionTracker;
   private browser: BrowserType<Browser>;
 
-  constructor(config: Config, browser: BrowserType<Browser>) {
+  constructor(browser: BrowserType<Browser>, config?: Config) {
     this.vrt = new VisualRegressionTracker(config);
     this.browser = browser;
   }
