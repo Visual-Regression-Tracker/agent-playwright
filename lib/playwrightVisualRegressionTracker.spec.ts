@@ -11,11 +11,13 @@ import {
 import { mocked } from "ts-jest/utils";
 import { MaybeMocked } from "ts-jest/dist/utils/testing";
 
+jest.mock("@visual-regression-tracker/sdk-js");
+
 let browserType = chromium;
 let browser: Browser;
 let context: BrowserContext;
 let page: Page;
-let vrt: PlaywrightVisualRegressionTracker;
+let playwrightVrt: PlaywrightVisualRegressionTracker;
 
 const config: Config = {
   apiUrl: "http://localhost:4200",
@@ -34,7 +36,6 @@ beforeAll(async () => {
     },
   });
   page = await context.newPage();
-  vrt = new PlaywrightVisualRegressionTracker(browserType, config);
 });
 
 afterAll(async () => {
@@ -42,33 +43,33 @@ afterAll(async () => {
 });
 
 describe("playwright", () => {
+  beforeEach(() => {
+    playwrightVrt = new PlaywrightVisualRegressionTracker(browserType, config);
+  });
+
+  it("constructor", async () => {
+    expect(playwrightVrt["browser"]).toBe(browserType.name());
+    expect(VisualRegressionTracker).toHaveBeenCalledWith(config);
+  });
+
   it("start", async () => {
-    const startMock = jest.fn();
-    VisualRegressionTracker.prototype.start = startMock;
+    await playwrightVrt.start();
 
-    await vrt.start();
-
-    expect(startMock).toHaveBeenCalled();
+    expect(VisualRegressionTracker.prototype.start).toHaveBeenCalled();
   });
 
   it("stop", async () => {
-    const stopMock = jest.fn();
-    VisualRegressionTracker.prototype.stop = stopMock;
+    await playwrightVrt.stop();
 
-    await vrt.stop();
-
-    expect(stopMock).toHaveBeenCalled();
+    expect(VisualRegressionTracker.prototype.stop).toHaveBeenCalled();
   });
 
   describe("track", () => {
-    let trackMock: jest.Mock<any, any>;
     let pageMocked: MaybeMocked<Page>;
     const screenshot: Buffer = Buffer.from("image mocked");
 
     beforeEach(() => {
-      vrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
-      trackMock = jest.fn();
-      VisualRegressionTracker.prototype.track = trackMock;
+      playwrightVrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
       pageMocked = mocked(page);
       pageMocked.screenshot = jest.fn().mockResolvedValueOnce(screenshot);
     });
@@ -102,12 +103,12 @@ describe("playwright", () => {
           },
         };
 
-        await vrt.trackPage(page, imageName, trackOptions);
+        await playwrightVrt.trackPage(page, imageName, trackOptions);
 
         expect(pageMocked.screenshot).toHaveBeenCalledWith(
           trackOptions.screenshotOptions
         );
-        expect(trackMock).toHaveBeenCalledWith({
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
           browser: browserType.name(),
@@ -123,10 +124,10 @@ describe("playwright", () => {
         const imageName = "test name";
         pageMocked.viewportSize = jest.fn().mockReturnValueOnce(null);
 
-        await vrt.trackPage(page, imageName);
+        await playwrightVrt.trackPage(page, imageName);
 
         expect(pageMocked.screenshot).toHaveBeenCalledWith(undefined);
-        expect(trackMock).toHaveBeenCalledWith({
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
           browser: browserType.name(),
@@ -168,12 +169,16 @@ describe("playwright", () => {
           .fn()
           .mockResolvedValueOnce(screenshot);
 
-        await vrt.trackElementHandle(elementHandle, imageName, trackOptions);
+        await playwrightVrt.trackElementHandle(
+          elementHandle,
+          imageName,
+          trackOptions
+        );
 
         expect(elementHandleMocked!.screenshot).toHaveBeenCalledWith(
           trackOptions.screenshotOptions
         );
-        expect(trackMock).toHaveBeenCalledWith({
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
           browser: browserType.name(),
@@ -194,10 +199,10 @@ describe("playwright", () => {
           .fn()
           .mockResolvedValueOnce(screenshot);
 
-        await vrt.trackElementHandle(elementHandle, imageName);
+        await playwrightVrt.trackElementHandle(elementHandle, imageName);
 
         expect(elementHandleMocked!.screenshot).toHaveBeenCalledWith(undefined);
-        expect(trackMock).toHaveBeenCalledWith({
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
           browser: browserType.name(),
@@ -214,7 +219,7 @@ describe("playwright", () => {
         const elementHandle = await page.$("#test");
 
         await expect(
-          vrt.trackElementHandle(elementHandle, imageName)
+          playwrightVrt.trackElementHandle(elementHandle, imageName)
         ).rejects.toThrowError(new Error("ElementHandle is null"));
       });
     });

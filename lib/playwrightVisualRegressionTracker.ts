@@ -1,6 +1,7 @@
 import {
   VisualRegressionTracker,
   Config,
+  BuildResponse,
 } from "@visual-regression-tracker/sdk-js";
 import { Page, Browser, BrowserType, ElementHandle } from "playwright";
 import {
@@ -10,14 +11,14 @@ import {
 
 export class PlaywrightVisualRegressionTracker {
   private vrt: VisualRegressionTracker;
-  private browser: BrowserType<Browser>;
+  private browser: string;
 
-  constructor(browser: BrowserType<Browser>, config?: Config) {
+  constructor(browserType: BrowserType<Browser>, config?: Config) {
     this.vrt = new VisualRegressionTracker(config);
-    this.browser = browser;
+    this.browser = browserType.name();
   }
 
-  async start() {
+  async start(): Promise<BuildResponse> {
     return this.vrt.start();
   }
 
@@ -32,7 +33,7 @@ export class PlaywrightVisualRegressionTracker {
       imageBase64: (await page.screenshot(options?.screenshotOptions)).toString(
         "base64"
       ),
-      browser: this.browser.name(),
+      browser: this.browser,
       viewport: viewportSize
         ? `${viewportSize.width}x${viewportSize.height}`
         : undefined,
@@ -56,7 +57,7 @@ export class PlaywrightVisualRegressionTracker {
       imageBase64: (
         await elementHandle.screenshot(options?.screenshotOptions)
       ).toString("base64"),
-      browser: this.browser.name(),
+      browser: this.browser,
       viewport: options?.agent?.viewport,
       os: options?.agent?.os,
       device: options?.agent?.device,
