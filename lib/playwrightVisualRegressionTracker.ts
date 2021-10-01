@@ -1,9 +1,9 @@
 import {
   VisualRegressionTracker,
-  Config,
   BuildResponse,
+  Config,
 } from "@visual-regression-tracker/sdk-js";
-import { Page, Browser, BrowserType, ElementHandle } from "playwright";
+import { Page, ElementHandle } from "playwright";
 import {
   PageTrackOptions,
   ElementHandleTrackOptions,
@@ -13,9 +13,9 @@ export class PlaywrightVisualRegressionTracker {
   private vrt: VisualRegressionTracker;
   private browser: string;
 
-  constructor(browserType: BrowserType<Browser>, config?: Config) {
+  constructor(browserName: string, config?: Config) {
     this.vrt = new VisualRegressionTracker(config);
-    this.browser = browserType.name();
+    this.browser = browserName;
   }
 
   async start(): Promise<BuildResponse> {
@@ -26,7 +26,11 @@ export class PlaywrightVisualRegressionTracker {
     return this.vrt.stop();
   }
 
-  async trackPage(page: Page, name: string, options?: PageTrackOptions) {
+  async trackPage(
+    page: Pick<Page, "viewportSize" | "screenshot">,
+    name: string,
+    options?: PageTrackOptions
+  ) {
     const viewportSize = page.viewportSize();
     return this.vrt.track({
       name,

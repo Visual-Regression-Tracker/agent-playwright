@@ -7,12 +7,13 @@ import {
   PlaywrightVisualRegressionTracker,
   PageTrackOptions,
   ElementHandleTrackOptions,
-} from ".";
+} from "./index";
 import { mocked } from "ts-jest/utils";
 import { MaybeMocked } from "ts-jest/dist/utils/testing";
 
 jest.mock("@visual-regression-tracker/sdk-js");
 
+let browserName = chromium.name();
 let browserType = chromium;
 let browser: Browser;
 let context: BrowserContext;
@@ -44,11 +45,11 @@ afterAll(async () => {
 
 describe("playwright", () => {
   beforeEach(() => {
-    playwrightVrt = new PlaywrightVisualRegressionTracker(browserType, config);
+    playwrightVrt = new PlaywrightVisualRegressionTracker(browserName, config);
   });
 
   it("constructor", async () => {
-    expect(playwrightVrt["browser"]).toBe(browserType.name());
+    expect(playwrightVrt["browser"]).toBe(browserName);
     expect(VisualRegressionTracker).toHaveBeenCalledWith(config);
   });
 
@@ -111,7 +112,7 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
-          browser: browserType.name(),
+          browser: browserName,
           viewport: `1800x1600`,
           os: trackOptions.agent?.os,
           device: trackOptions.agent?.device,
@@ -130,7 +131,7 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
-          browser: browserType.name(),
+          browser: browserName,
           viewport: undefined,
           os: undefined,
           device: undefined,
@@ -181,7 +182,7 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
-          browser: browserType.name(),
+          browser: browserName,
           viewport: trackOptions.agent?.viewport,
           os: trackOptions.agent?.os,
           device: trackOptions.agent?.device,
@@ -205,7 +206,7 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
           name: imageName,
           imageBase64: screenshot.toString("base64"),
-          browser: browserType.name(),
+          browser: browserName,
           viewport: undefined,
           os: undefined,
           device: undefined,
