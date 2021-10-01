@@ -62,16 +62,16 @@ export interface Agent {
   viewport?: string;
 }
 
-export interface PageTrackOptions {
+interface BaseTrackOptions {
   diffTollerancePercent?: number;
   ignoreAreas?: IgnoreArea[];
-  screenshotOptions?: PageScreenshotOptions;
   agent?: Agent;
 }
 
-export interface ElementHandleTrackOptions {
-  diffTollerancePercent?: number;
-  ignoreAreas?: IgnoreArea[];
+export interface PageTrackOptions extends BaseTrackOptions {
+  screenshotOptions?: PageScreenshotOptions;
+}
+
+export interface ElementHandleTrackOptions extends BaseTrackOptions {
   screenshotOptions?: ElementHandleScreenshotOptions;
-  agent?: Agent;
 }
