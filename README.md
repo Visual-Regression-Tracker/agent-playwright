@@ -28,8 +28,6 @@ import { chromium, Browser, Page, BrowserContext } from "playwright";
 #### Explicit config from code
 
 ```js
-const browserType = chromium; // any BrowserType supported by Playwright
-
 const config: Config = {
   // URL where backend is running
   // Required
@@ -56,7 +54,8 @@ const config: Config = {
   ciBuildId: "SOME_UNIQUE_ID",
 };
 
-const vrt = new PlaywrightVisualRegressionTracker(browserType, config);
+const browserName = chromium.name(); 
+const vrt = new PlaywrightVisualRegressionTracker(browserName, config);
 ```
 
 #### Or, as JSON config file `vrt.json`
