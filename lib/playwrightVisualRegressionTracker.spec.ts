@@ -26,7 +26,6 @@ const config: Config = {
   project: "Default project",
   apiKey: "BAZ0EG0PRH4CRQPH19ZKAVADBP9E",
   enableSoftAssert: false,
-  browserName: "chrome",
 };
 
 beforeAll(async () => {
