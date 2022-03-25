@@ -76,7 +76,7 @@ describe("playwright", () => {
 
     beforeEach(() => {
       playwrightVrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
-      pageMocked = mocked(page);
+      pageMocked = mocked(page, true);
       pageMocked.screenshot.mockResolvedValueOnce(screenshot);
     });
 
