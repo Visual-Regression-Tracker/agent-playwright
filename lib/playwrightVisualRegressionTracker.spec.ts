@@ -2,19 +2,14 @@ import {
   Config,
   VisualRegressionTracker,
 } from "@visual-regression-tracker/sdk-js";
-import {
-  Browser,
-  BrowserContext,
-  Page,
-  chromium,
-  ElementHandle,
-} from "playwright";
+import { Browser, BrowserContext, Page, chromium } from "playwright";
 import {
   PlaywrightVisualRegressionTracker,
   PageTrackOptions,
   ElementHandleTrackOptions,
 } from "./index";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked } from "ts-jest/utils";
+import { MaybeMocked } from "ts-jest/dist/utils/testing";
 
 jest.mock("@visual-regression-tracker/sdk-js");
 
@@ -71,13 +66,13 @@ describe("playwright", () => {
   });
 
   describe("track", () => {
-    let pageMocked: MockedObject<Page>;
+    let pageMocked: MaybeMocked<Page>;
     const screenshot: Buffer = Buffer.from("image mocked");
 
     beforeEach(() => {
       playwrightVrt["vrt"]["isStarted"] = jest.fn().mockReturnValueOnce(true);
-      pageMocked = mocked(page, true);
-      pageMocked.screenshot.mockResolvedValueOnce(screenshot);
+      pageMocked = mocked(page);
+      pageMocked.screenshot = jest.fn().mockResolvedValueOnce(screenshot);
     });
 
     describe("trackPage", () => {
@@ -128,7 +123,7 @@ describe("playwright", () => {
 
       it("track default fields", async () => {
         const imageName = "test name";
-        pageMocked.viewportSize.mockReturnValueOnce(null);
+        pageMocked.viewportSize = jest.fn().mockReturnValueOnce(null);
 
         await playwrightVrt.trackPage(page, imageName);
 
@@ -168,12 +163,12 @@ describe("playwright", () => {
             timeout: 12,
           },
         };
-        pageMocked.$.mockResolvedValueOnce(
-          {} as ElementHandle<SVGElement | HTMLElement>
-        );
+        pageMocked.$ = jest.fn().mockResolvedValueOnce({});
         const elementHandle = await page.$("#test");
         const elementHandleMocked = mocked(elementHandle);
-        elementHandleMocked!.screenshot.mockResolvedValueOnce(screenshot);
+        elementHandleMocked!.screenshot = jest
+          .fn()
+          .mockResolvedValueOnce(screenshot);
 
         await playwrightVrt.trackElementHandle(
           elementHandle,
@@ -198,12 +193,12 @@ describe("playwright", () => {
 
       it("track default fields", async () => {
         const imageName = "test name";
-        pageMocked.$.mockResolvedValueOnce(
-          {} as ElementHandle<SVGElement | HTMLElement>
-        );
+        pageMocked.$ = jest.fn().mockResolvedValueOnce({});
         const elementHandle = await page.$("#test");
         const elementHandleMocked = mocked(elementHandle);
-        elementHandleMocked!.screenshot.mockResolvedValueOnce(screenshot);
+        elementHandleMocked!.screenshot = jest
+          .fn()
+          .mockResolvedValueOnce(screenshot);
 
         await playwrightVrt.trackElementHandle(elementHandle, imageName);
 
@@ -221,7 +216,7 @@ describe("playwright", () => {
 
       it("should throw if no elementHandle", async () => {
         const imageName = "test name";
-        pageMocked.$.mockResolvedValueOnce(null);
+        pageMocked.$ = jest.fn().mockResolvedValueOnce(null);
         const elementHandle = await page.$("#test");
 
         await expect(
