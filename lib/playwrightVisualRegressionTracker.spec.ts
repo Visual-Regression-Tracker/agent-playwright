@@ -8,7 +8,7 @@ import {
   PageTrackOptions,
   ElementHandleTrackOptions,
 } from "./index";
-import { mocked } from "ts-jest/utils";
+import { mocked } from "jest-mock";
 import { MaybeMocked } from "ts-jest/dist/utils/testing";
 
 jest.mock("@visual-regression-tracker/sdk-js");
