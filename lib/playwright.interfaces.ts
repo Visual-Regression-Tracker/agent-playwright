@@ -66,6 +66,7 @@ interface BaseTrackOptions {
   diffTollerancePercent?: number;
   ignoreAreas?: IgnoreArea[];
   agent?: Agent;
+  comment?: string;
 }
 
 export interface PageTrackOptions extends BaseTrackOptions {
