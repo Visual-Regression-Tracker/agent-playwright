@@ -54,7 +54,7 @@ const config: Config = {
   ciBuildId: "SOME_UNIQUE_ID",
 };
 
-const browserName = chromium.name(); 
+const browserName = chromium.name();
 const vrt = new PlaywrightVisualRegressionTracker(browserName, config);
 ```
 
@@ -121,6 +121,7 @@ await vrt.trackPage(page, imageName[, options])
 - `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
 - `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
 - - `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
+- - `comment` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> comment for test run
 - - `ignoreAreas` <[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>
 - - - `x` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> X-coordinate relative of left upper corner
 - - - `y` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Y-coordinate relative of left upper corner
@@ -139,6 +140,7 @@ await vrt.trackPage(page, imageName[, options])
 - - - `os` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> operating system name, like Windows, Mac, etc.
 - - - `device` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> device name, PC identifier, mobile identifier etc.
 - - - `viewport` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> viewport size.
+- `retryCount` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time to retry screenshot if case of diff
 
 ### Track elementHandle
 
@@ -150,6 +152,7 @@ await vrt.trackElementHandle(elementHandle, imageName[, options])
 - `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
 - `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
 - - `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
+- - `comment` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> comment for test run
 - - `ignoreAreas` <[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>
 - - - `x` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> X-coordinate relative of left upper corner
 - - - `y` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Y-coordinate relative of left upper corner
@@ -162,3 +165,4 @@ await vrt.trackElementHandle(elementHandle, imageName[, options])
 - - - `os` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> operating system name, like Windows, Mac, etc.
 - - - `device` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> device name, PC identifier, mobile identifier etc.
 - - - `viewport` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> viewport size.
+- `retryCount` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time to retry screenshot if case of diff

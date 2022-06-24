@@ -29,44 +29,54 @@ export class PlaywrightVisualRegressionTracker {
   async trackPage(
     page: Pick<Page, "viewportSize" | "screenshot">,
     name: string,
-    options?: PageTrackOptions
+    options?: PageTrackOptions,
+    retryCount = 2
   ) {
     const viewportSize = page.viewportSize();
-    return this.vrt.track({
-      name,
-      imageBase64: (await page.screenshot(options?.screenshotOptions)).toString(
-        "base64"
-      ),
-      browser: this.browser,
-      viewport: viewportSize
-        ? `${viewportSize.width}x${viewportSize.height}`
-        : undefined,
-      os: options?.agent?.os,
-      device: options?.agent?.device,
-      diffTollerancePercent: options?.diffTollerancePercent,
-      ignoreAreas: options?.ignoreAreas,
-    });
+    return this.vrt.track(
+      {
+        name,
+        imageBase64: (
+          await page.screenshot(options?.screenshotOptions)
+        ).toString("base64"),
+        browser: this.browser,
+        viewport: viewportSize
+          ? `${viewportSize.width}x${viewportSize.height}`
+          : undefined,
+        os: options?.agent?.os,
+        device: options?.agent?.device,
+        diffTollerancePercent: options?.diffTollerancePercent,
+        ignoreAreas: options?.ignoreAreas,
+        comment: options?.comment,
+      },
+      retryCount
+    );
   }
 
   async trackElementHandle(
     elementHandle: ElementHandle | null,
     name: string,
-    options?: ElementHandleTrackOptions
+    options?: ElementHandleTrackOptions,
+    retryCount = 2
   ) {
     if (!elementHandle) {
       throw new Error("ElementHandle is null");
     }
-    return this.vrt.track({
-      name,
-      imageBase64: (
-        await elementHandle.screenshot(options?.screenshotOptions)
-      ).toString("base64"),
-      browser: this.browser,
-      viewport: options?.agent?.viewport,
-      os: options?.agent?.os,
-      device: options?.agent?.device,
-      diffTollerancePercent: options?.diffTollerancePercent,
-      ignoreAreas: options?.ignoreAreas,
-    });
+    return this.vrt.track(
+      {
+        name,
+        imageBase64: (
+          await elementHandle.screenshot(options?.screenshotOptions)
+        ).toString("base64"),
+        browser: this.browser,
+        viewport: options?.agent?.viewport,
+        os: options?.agent?.os,
+        device: options?.agent?.device,
+        diffTollerancePercent: options?.diffTollerancePercent,
+        ignoreAreas: options?.ignoreAreas,
+        comment: options?.comment,
+      },
+      retryCount
+    );
   }
 }

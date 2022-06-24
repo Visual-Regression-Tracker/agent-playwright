@@ -79,6 +79,7 @@ describe("playwright", () => {
       it("track all fields", async () => {
         const imageName = "test name";
         const trackOptions: PageTrackOptions = {
+          comment: "Test comment",
           diffTollerancePercent: 12.31,
           ignoreAreas: [
             {
@@ -109,16 +110,20 @@ describe("playwright", () => {
         expect(pageMocked.screenshot).toHaveBeenCalledWith(
           trackOptions.screenshotOptions
         );
-        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
-          name: imageName,
-          imageBase64: screenshot.toString("base64"),
-          browser: browserName,
-          viewport: `1800x1600`,
-          os: trackOptions.agent?.os,
-          device: trackOptions.agent?.device,
-          diffTollerancePercent: trackOptions.diffTollerancePercent,
-          ignoreAreas: trackOptions.ignoreAreas,
-        });
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
+          {
+            name: imageName,
+            imageBase64: screenshot.toString("base64"),
+            browser: browserName,
+            viewport: `1800x1600`,
+            os: trackOptions.agent?.os,
+            device: trackOptions.agent?.device,
+            diffTollerancePercent: trackOptions.diffTollerancePercent,
+            ignoreAreas: trackOptions.ignoreAreas,
+            comment: trackOptions.comment,
+          },
+          2
+        );
       });
 
       it("track default fields", async () => {
@@ -128,15 +133,19 @@ describe("playwright", () => {
         await playwrightVrt.trackPage(page, imageName);
 
         expect(pageMocked.screenshot).toHaveBeenCalledWith(undefined);
-        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
-          name: imageName,
-          imageBase64: screenshot.toString("base64"),
-          browser: browserName,
-          viewport: undefined,
-          os: undefined,
-          device: undefined,
-          diffTollerancePercent: undefined,
-        });
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
+          {
+            name: imageName,
+            imageBase64: screenshot.toString("base64"),
+            browser: browserName,
+            viewport: undefined,
+            os: undefined,
+            device: undefined,
+            diffTollerancePercent: undefined,
+            comment: undefined,
+          },
+          2
+        );
       });
     });
 
@@ -162,6 +171,7 @@ describe("playwright", () => {
             omitBackground: true,
             timeout: 12,
           },
+          comment: "Test comment",
         };
         pageMocked.$ = jest.fn().mockResolvedValueOnce({});
         const elementHandle = await page.$("#test");
@@ -179,16 +189,20 @@ describe("playwright", () => {
         expect(elementHandleMocked!.screenshot).toHaveBeenCalledWith(
           trackOptions.screenshotOptions
         );
-        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
-          name: imageName,
-          imageBase64: screenshot.toString("base64"),
-          browser: browserName,
-          viewport: trackOptions.agent?.viewport,
-          os: trackOptions.agent?.os,
-          device: trackOptions.agent?.device,
-          diffTollerancePercent: trackOptions.diffTollerancePercent,
-          ignoreAreas: trackOptions.ignoreAreas,
-        });
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
+          {
+            name: imageName,
+            imageBase64: screenshot.toString("base64"),
+            browser: browserName,
+            viewport: trackOptions.agent?.viewport,
+            os: trackOptions.agent?.os,
+            device: trackOptions.agent?.device,
+            diffTollerancePercent: trackOptions.diffTollerancePercent,
+            ignoreAreas: trackOptions.ignoreAreas,
+            comment: trackOptions.comment,
+          },
+          2
+        );
       });
 
       it("track default fields", async () => {
@@ -203,15 +217,19 @@ describe("playwright", () => {
         await playwrightVrt.trackElementHandle(elementHandle, imageName);
 
         expect(elementHandleMocked!.screenshot).toHaveBeenCalledWith(undefined);
-        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith({
-          name: imageName,
-          imageBase64: screenshot.toString("base64"),
-          browser: browserName,
-          viewport: undefined,
-          os: undefined,
-          device: undefined,
-          diffTollerancePercent: undefined,
-        });
+        expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
+          {
+            name: imageName,
+            imageBase64: screenshot.toString("base64"),
+            browser: browserName,
+            viewport: undefined,
+            os: undefined,
+            device: undefined,
+            diffTollerancePercent: undefined,
+            comment: undefined,
+          },
+          2
+        );
       });
 
       it("should throw if no elementHandle", async () => {
