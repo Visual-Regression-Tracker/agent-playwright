@@ -2,7 +2,7 @@ import {
   Config,
   VisualRegressionTracker,
 } from "@visual-regression-tracker/sdk-js";
-import { Browser, BrowserContext, Page, chromium } from "playwright";
+import { Browser, BrowserContext, Page, chromium } from "@playwright/test";
 import {
   PlaywrightVisualRegressionTracker,
   PageTrackOptions,

@@ -3,7 +3,7 @@ import {
   BuildResponse,
   Config,
 } from "@visual-regression-tracker/sdk-js";
-import { Page, ElementHandle } from "playwright";
+import { Page, ElementHandle } from "@playwright/test";
 import {
   PageTrackOptions,
   ElementHandleTrackOptions,
