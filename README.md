@@ -20,7 +20,7 @@ import {
   PlaywrightVisualRegressionTracker,
   Config,
 } from "@visual-regression-tracker/agent-playwright";
-import { chromium, Browser, Page, BrowserContext } from "playwright";
+import { chromium, Browser, Page, BrowserContext } from "@playwright/test";
 ```
 
 ### Configure connection
