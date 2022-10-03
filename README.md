@@ -166,3 +166,4 @@ await vrt.trackElementHandle(elementHandle, imageName[, options])
 - - - `device` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> device name, PC identifier, mobile identifier etc.
 - - - `viewport` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> viewport size.
 - `retryCount` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time to retry screenshot if case of diff
+
