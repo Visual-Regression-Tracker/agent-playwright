@@ -3,7 +3,7 @@ import {
   BuildResponse,
   Config,
 } from "@visual-regression-tracker/sdk-js";
-import { Page, ElementHandle } from "@playwright/test";
+import { Page, ElementHandle, Locator } from "@playwright/test";
 import {
   PageTrackOptions,
   ElementHandleTrackOptions,
@@ -54,7 +54,7 @@ export class PlaywrightVisualRegressionTracker {
   }
 
   async trackElementHandle(
-    elementHandle: ElementHandle | null,
+    elementHandle: ElementHandle | Locator | null,
     name: string,
     options?: ElementHandleTrackOptions,
     retryCount = 2

@@ -148,7 +148,7 @@ await vrt.trackPage(page, imageName[, options])
 await vrt.trackElementHandle(elementHandle, imageName[, options])
 ```
 
-- `elementHandle` <[ElementHandle](https://playwright.dev/#version=v1.4.0&path=docs%2Fapi.md&q=class-elementhandle)> Playwright ElementHandle
+- `elementHandle` <[ElementHandle](https://playwright.dev/docs/api/class-elementhandle)|[Locator](https://playwright.dev/docs/api/class-locator)> Playwright ElementHandle or Locator
 - `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
 - `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
 - - `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
