@@ -1,7 +1,7 @@
 {
   "name": "@visual-regression-tracker/agent-playwright",
   "version": "5.0.0",
-  "description": "",
+  "description": "Native integration for Playwright with Visual Regression Tracker",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -19,7 +19,7 @@
     "playwright"
   ],
   "author": "Pavel Strunkin",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Visual-Regression-Tracker/agent-playwright/issues"
   },
