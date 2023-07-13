@@ -24,7 +24,7 @@
     "url": "https://github.com/Visual-Regression-Tracker/agent-playwright/issues"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "homepage": "https://github.com/Visual-Regression-Tracker/agent-playwright#readme",
   "dependencies": {
