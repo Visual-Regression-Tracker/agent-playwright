@@ -1,6 +1,5 @@
 import { IgnoreArea } from "@visual-regression-tracker/sdk-js";
-import { ElementHandle } from "playwright-core";
-import { Page } from "@playwright/test";
+import { Page, ElementHandle } from "@playwright/test";
 
 export interface Agent {
   os?: string;
