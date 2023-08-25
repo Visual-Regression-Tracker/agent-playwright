@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit",
     "test:cov": "jest --collectCoverage --detectOpenHandles --forceExit",
-    "build": "./node_modules/.bin/tsc"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

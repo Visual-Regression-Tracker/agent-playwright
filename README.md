@@ -1,7 +1,7 @@
 # Native integration for [Playwright](https://github.com/microsoft/playwright) with [Visual Regression Tracker](https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker)
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7c9f8095909c4220bff56b66b4cb728d)](https://www.codacy.com/gh/Visual-Regression-Tracker/agent-playwright?utm_source=github.com&utm_medium=referral&utm_content=Visual-Regression-Tracker/agent-playwright&utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/7c9f8095909c4220bff56b66b4cb728d)](https://www.codacy.com/gh/Visual-Regression-Tracker/agent-playwright?utm_source=github.com&utm_medium=referral&utm_content=Visual-Regression-Tracker/agent-playwright&utm_campaign=Badge_Coverage)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Visual-Regression-Tracker_agent-playwright&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Visual-Regression-Tracker_agent-playwright)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Visual-Regression-Tracker_agent-playwright&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Visual-Regression-Tracker_agent-playwright)
 
 ## Npm
 
