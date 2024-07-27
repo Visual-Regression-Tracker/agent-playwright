@@ -6,8 +6,7 @@ updates:
     interval: daily
   open-pull-requests-limit: 2
   groups:
-      dev-deps:
-        dependency-type: "production"
-      prod-deps:
-        dependency-type: "development"
-
+    dev-deps:
+      dependency-type: "production"
+    prod-deps:
+      dependency-type: "development"
