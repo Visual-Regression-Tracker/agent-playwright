@@ -234,7 +234,7 @@ describe("playwright", () => {
 
         await expect(
           playwrightVrt.trackElementHandle(elementHandle, imageName)
-        ).rejects.toThrowError(new Error("ElementHandle is null"));
+        ).rejects.toThrow(new Error("ElementHandle is null"));
       });
     });
   });
