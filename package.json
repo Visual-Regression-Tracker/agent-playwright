@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Visual-Regression-Tracker/agent-playwright#readme",
   "dependencies": {
-    "@visual-regression-tracker/sdk-js": "^5.7.1"
+    "@visual-regression-tracker/sdk-js": "^5.7.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
