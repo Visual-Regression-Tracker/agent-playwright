@@ -52,6 +52,49 @@ describe("playwright", () => {
     expect(VisualRegressionTracker).toHaveBeenCalledWith(config);
   });
 
+  describe("sourceBranch", () => {
+    const INIT_ENV = process.env;
+
+    beforeEach(() => {
+      process.env = { ...INIT_ENV, VRT_SOURCEBRANCH: "release" };
+    });
+
+    afterEach(() => {
+      process.env = INIT_ENV;
+    });
+
+    it.each([
+      ["add VRT_SOURCEBRANCH to an explicit config", undefined, "release"],
+      ["prefer sourceBranch from the explicit config", "fromConfig", "fromConfig"],
+    ])("constructor should %s", (_, sourceBranch, expected) => {
+      new PlaywrightVisualRegressionTracker(browserName, { ...config, sourceBranch });
+
+      expect(VisualRegressionTracker).toHaveBeenLastCalledWith({
+        ...config,
+        sourceBranch: expected,
+      });
+    });
+
+    it("constructor should prefer deprecated baselineBranchName from the explicit config", () => {
+      new PlaywrightVisualRegressionTracker(browserName, {
+        ...config,
+        baselineBranchName: "fromConfig",
+      });
+
+      expect(VisualRegressionTracker).toHaveBeenLastCalledWith({
+        ...config,
+        baselineBranchName: "fromConfig",
+        sourceBranch: "fromConfig",
+      });
+    });
+
+    it("constructor without config should leave env to sdk-js", () => {
+      new PlaywrightVisualRegressionTracker(browserName);
+
+      expect(VisualRegressionTracker).toHaveBeenLastCalledWith(undefined);
+    });
+  });
+
   it("start", async () => {
     await playwrightVrt.start();
 

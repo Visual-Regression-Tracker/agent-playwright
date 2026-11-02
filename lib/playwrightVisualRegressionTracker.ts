@@ -14,7 +14,16 @@ export class PlaywrightVisualRegressionTracker {
   private browser: string;
 
   constructor(browserName: string, config?: Config) {
-    this.vrt = new VisualRegressionTracker(config);
+    // sdk-js skips VRT_* variables when given an explicit config
+    this.vrt = new VisualRegressionTracker(
+      config && {
+        ...config,
+        sourceBranch:
+          config.sourceBranch ||
+          config.baselineBranchName ||
+          process.env.VRT_SOURCEBRANCH,
+      }
+    );
     this.browser = browserName;
   }
 
