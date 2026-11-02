@@ -1,180 +1,134 @@
-# Native integration for [Playwright](https://github.com/microsoft/playwright) with [Visual Regression Tracker](https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker)
+# Playwright agent for [Visual Regression Tracker](https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker)
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Visual-Regression-Tracker_agent-playwright&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Visual-Regression-Tracker_agent-playwright)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Visual-Regression-Tracker_agent-playwright&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Visual-Regression-Tracker_agent-playwright)
+[![npm](https://img.shields.io/npm/v/@visual-regression-tracker/agent-playwright)](https://www.npmjs.com/package/@visual-regression-tracker/agent-playwright)
 
-## Npm
+Tracks [Playwright](https://playwright.dev) page and element screenshots. The agent is built on [sdk-js](https://github.com/Visual-Regression-Tracker/sdk-js).
 
-https://www.npmjs.com/package/@visual-regression-tracker/agent-playwright
+## Requirements
+
+- `@playwright/test` 1.x
+- Node.js 18 or later
+- Visual Regression Tracker server 5.0.8 or later; 6 is recommended
 
 ## Install
 
-`npm install @visual-regression-tracker/agent-playwright`
-
-## Usage
-
-### Import
-
-```js
-import {
-  PlaywrightVisualRegressionTracker,
-  Config,
-} from "@visual-regression-tracker/agent-playwright";
-import { chromium, Browser, Page, BrowserContext } from "@playwright/test";
+```sh
+npm install --save-dev @visual-regression-tracker/agent-playwright
 ```
 
-### Configure connection
+## Configuration
 
-#### Explicit config from code
+| Option | Environment variable | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `apiUrl` | `VRT_APIURL` | yes | | URL of the server API, e.g. `http://localhost:4200` |
+| `apiKey` | `VRT_APIKEY` | yes | | API key of a user with access to the project |
+| `project` | `VRT_PROJECT` | yes | | Project name or ID |
+| `branchName` | `VRT_BRANCHNAME` | yes | | Current git branch |
+| `sourceBranch` | `VRT_SOURCEBRANCH` | no | project's main branch | Branch to take baselines from while `branchName` has none of its own |
+| `ciBuildId` | `VRT_CIBUILDID` | no | | ID of one CI build; machines with the same ID share a build |
+| `enableSoftAssert` | `VRT_ENABLESOFTASSERT` | no | `false` | Log failed comparisons instead of throwing |
 
-```js
+Pass the options to the constructor, after the browser name:
+
+```ts
+import { chromium } from "@playwright/test";
+import { PlaywrightVisualRegressionTracker, Config } from "@visual-regression-tracker/agent-playwright";
+
 const config: Config = {
-  // URL where backend is running
-  // Required
   apiUrl: "http://localhost:4200",
-
-  // Project name or ID
-  // Required
-  project: "Default project",
-
-  // User apiKey
-  // Required
   apiKey: "tXZVHX0EA4YQM1MGDD",
-
-  // Current git branch
-  // Required
+  project: "Default project",
   branchName: "develop",
-
-  // Branch to take baselines from instead of the project's main branch
-  // Optional - default is the project's main branch
-  // Also read from VRT_SOURCEBRANCH when not set here
-  sourceBranch: "release",
-
-  // Log errors instead of throwing exceptions
-  // Optional - default false
-  enableSoftAssert: true,
-
-  // Unique ID related to one CI build
-  // Optional - default null
-  ciBuildId: "SOME_UNIQUE_ID",
 };
-
-const browserName = chromium.name();
-const vrt = new PlaywrightVisualRegressionTracker(browserName, config);
+const vrt = new PlaywrightVisualRegressionTracker(chromium.name(), config);
 ```
 
-#### Or, as JSON config file `vrt.json`
-
-_Used only if not explicit config provided_
-_Is overriden if ENV variables are present_
+Or leave the config out. The options are then read from `vrt.json` in the working directory, with the same keys:
 
 ```json
 {
   "apiUrl": "http://localhost:4200",
-  "project": "Default project",
   "apiKey": "tXZVHX0EA4YQM1MGDD",
-  "ciBuildId": "commit_sha",
+  "project": "Default project",
   "branchName": "develop",
   "sourceBranch": "release",
+  "ciBuildId": "commit_sha",
   "enableSoftAssert": false
 }
 ```
 
-#### Or, as environment variables
+Environment variables override `vrt.json` key by key. With an explicit config, only `VRT_SOURCEBRANCH` is read from the environment.
 
-_Used only if not explicit config provided_
+`baselineBranchName` (`VRT_BASELINEBRANCHNAME`) is a deprecated alias of `sourceBranch`. It still works and logs a warning once.
 
-```
-VRT_APIURL="http://localhost:4200"
-VRT_PROJECT="Default project"
-VRT_APIKEY="tXZVHX0EA4YQM1MGDD"
-VRT_CIBUILDID="commit_sha"
-VRT_BRANCHNAME="develop"
-VRT_SOURCEBRANCH="release"
-VRT_ENABLESOFTASSERT=true
-```
+## Usage
 
-`sourceBranch` replaces `baselineBranchName` (`VRT_BASELINEBRANCHNAME`), which
-the server never read. The old name still works as an alias and logs a
-deprecation warning; like the other `VRT_*` variables, `VRT_BASELINEBRANCHNAME`
-is read only when no explicit config is passed.
+```ts
+await vrt.start();
 
-### Setup
+await page.goto("https://the-internet.herokuapp.com");
 
-```js
-vrt.start();
+await vrt.trackPage(page, "Home page");
+
+await vrt.trackElementHandle(page.locator("h1"), "Heading", {
+  diffTollerancePercent: 1,
+  agent: { os: "linux", device: "desktop" },
+});
+
+await vrt.stop();
 ```
 
-### Teardown
+`trackPage(page, name, options, retryCount)` and `trackElementHandle(elementHandleOrLocator, name, options, retryCount)` take the screenshot and track it.
+`retryCount` is how many more times to submit the same screenshot while the result is `unresolved`. The default is 2.
+Every option is optional:
 
-```js
-vrt.stop();
-```
+| Option | Description |
+| --- | --- |
+| `agent.os`, `agent.device`, `agent.viewport` | Tell baselines of the same name apart; `trackPage` takes the viewport from the page |
+| `diffTollerancePercent` | Allowed difference, in percent of all pixels (the spelling is the API's) |
+| `ignoreAreas` | `[{ x, y, width, height }]` in pixels, left out of the comparison |
+| `comment` | Shown with the test run |
+| `screenshotOptions` | Passed to Playwright's [`page.screenshot()`](https://playwright.dev/docs/api/class-page#page-screenshot) or [`locator.screenshot()`](https://playwright.dev/docs/api/class-locator#locator-screenshot) |
 
-### Navigate to needed page
+The browser is the name passed to the constructor.
 
-```js
-// set up Playwright
-const browser = await browserType.launch({ headless: false });
-const context = await browser.newContext();
-const page = await context.newPage();
+## Results and statuses
 
-// navigate to url
-await page.goto("https://google.com/");
-```
+Both methods resolve to sdk-js's `TestRunResult`:
 
-### Track page
+- `testRunResponse` holds the server's answer, including `id`, `status` and `url`.
+- `imageUrl`, `diffUrl` and `baselineUrl` link to the images.
 
-```js
-await vrt.trackPage(page, imageName[, options])
-```
+| Status | Outcome |
+| --- | --- |
+| `new` | No baseline yet: throws, or logs with `enableSoftAssert` |
+| `unresolved` | Differs from the baseline: throws, or logs with `enableSoftAssert` |
+| `ok`, `approved`, `autoApproved` | Passes |
+| `failed` | A reviewer rejected it: passes with a warning |
+| anything else | Passes with a warning |
 
-- `page` <[Page](https://playwright.dev/#version=v1.0.2&path=docs%2Fapi.md&q=class-page)> Playwright page
-- `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
-- `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
-- - `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
-- - `comment` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> comment for test run
-- - `ignoreAreas` <[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>
-- - - `x` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> X-coordinate relative of left upper corner
-- - - `y` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Y-coordinate relative of left upper corner
-- - - `width` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> area width in px
-- - - `height` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> area height in px
-- - `screenshotOptions` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> configuration for Playwrights `screenshot` method
-- - - `fullPage` <[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)> When true, takes a screenshot of the full scrollable page, instead of the currently visibvle viewport. Defaults to `false`.
-- - - `omitBackground` <[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)> Hides default white background and allows capturing screenshots with transparency. Defaults to `false`.
-- - - `clip` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> An object which specifies clipping of the resulting image. Should have the following fields:
-- - - - `x` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> x-coordinate of top-left corner of clip area
-- - - - `y` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> y-coordinate of top-left corner of clip area
-- - - - `width` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> width of clipping area
-- - - - `height` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> height of clipping area
-- - - `timeout` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
-- - `agent` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> Additional information to mark baseline across agents that have different:
-- - - `os` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> operating system name, like Windows, Mac, etc.
-- - - `device` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> device name, PC identifier, mobile identifier etc.
-- - - `viewport` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> viewport size.
-- `retryCount` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time to retry screenshot if case of diff
+## Errors
 
-### Track elementHandle
+Request errors name the HTTP status and the server's message, and add a hint for common causes, such as a wrong `apiKey` (401) or an image over the server's limits (413, 422). See [sdk-js](https://github.com/Visual-Regression-Tracker/sdk-js#errors).
 
-```js
-await vrt.trackElementHandle(elementHandle, imageName[, options])
-```
+## Examples
 
-- `elementHandle` <[ElementHandle](https://playwright.dev/docs/api/class-elementhandle)|[Locator](https://playwright.dev/docs/api/class-locator)> Playwright ElementHandle or Locator
-- `imageName` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> name for the taken screenshot image
-- `options` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> optional configuration with:
-- - `diffTollerancePercent` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> specify acceptable difference from baseline, between `0-100`.
-- - `comment` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> comment for test run
-- - `ignoreAreas` <[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)<[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>
-- - - `x` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> X-coordinate relative of left upper corner
-- - - `y` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Y-coordinate relative of left upper corner
-- - - `width` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> area width in px
-- - - `height` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> area height in px
-- - `screenshotOptions` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> configuration for Playwrights `screenshot` method
-- - - `omitBackground` <[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)> Hides default white background and allows capturing screenshots with transparency. Defaults to `false`.
-- - - `timeout` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
-- - `agent` <[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)> Additional information to mark baseline across agents that have different:
-- - - `os` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> operating system name, like Windows, Mac, etc.
-- - - `device` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> device name, PC identifier, mobile identifier etc.
-- - - `viewport` <[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type)> viewport size.
-- `retryCount` <[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)> Maximum time to retry screenshot if case of diff
+[examples-js](https://github.com/Visual-Regression-Tracker/examples-js)
+
+## Releasing
+
+Every push to `master` runs [semantic-release](https://semantic-release.gitbook.io). It reads the [Conventional Commits](https://www.conventionalcommits.org) since the last `v*` tag:
+
+| Commit | Release |
+| --- | --- |
+| `fix:` | patch |
+| `feat:` | minor |
+| `feat!:` or a `BREAKING CHANGE:` footer | major |
+| `chore:`, `ci:`, `docs:`, `test:` | none |
+
+It then publishes to npm through trusted publishing with provenance, tags `vX.Y.Z`, and writes the GitHub release.
+The `version` field in `package.json` is a placeholder. The released version lives in the tags and on npm.
+
+## License
+
+[Apache-2.0](LICENSE)

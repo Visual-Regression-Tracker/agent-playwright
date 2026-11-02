@@ -1,9 +1,0 @@
-.vscode
-
-jest.config.js
-tsconfig.json
-lib
-test
-coverage
-.github
-**/*.spec.*
