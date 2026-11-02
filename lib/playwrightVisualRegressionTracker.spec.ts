@@ -123,6 +123,7 @@ describe("playwright", () => {
         const trackOptions: PageTrackOptions = {
           comment: "Test comment",
           diffTollerancePercent: 12.31,
+          customTags: "smoke,dark",
           ignoreAreas: [
             {
               x: 1,
@@ -155,11 +156,12 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
           {
             name: imageName,
-            imageBase64: screenshot.toString("base64"),
+            imageBuffer: screenshot,
             browser: browserName,
             viewport: `1800x1600`,
             os: trackOptions.agent?.os,
             device: trackOptions.agent?.device,
+            customTags: trackOptions.customTags,
             diffTollerancePercent: trackOptions.diffTollerancePercent,
             ignoreAreas: trackOptions.ignoreAreas,
             comment: trackOptions.comment,
@@ -178,11 +180,12 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
           {
             name: imageName,
-            imageBase64: screenshot.toString("base64"),
+            imageBuffer: screenshot,
             browser: browserName,
             viewport: undefined,
             os: undefined,
             device: undefined,
+            customTags: undefined,
             diffTollerancePercent: undefined,
             comment: undefined,
           },
@@ -196,6 +199,7 @@ describe("playwright", () => {
         const imageName = "test name";
         const trackOptions: ElementHandleTrackOptions = {
           diffTollerancePercent: 12.31,
+          customTags: "smoke,dark",
           ignoreAreas: [
             {
               x: 1,
@@ -232,11 +236,12 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
           {
             name: imageName,
-            imageBase64: screenshot.toString("base64"),
+            imageBuffer: screenshot,
             browser: browserName,
             viewport: trackOptions.agent?.viewport,
             os: trackOptions.agent?.os,
             device: trackOptions.agent?.device,
+            customTags: trackOptions.customTags,
             diffTollerancePercent: trackOptions.diffTollerancePercent,
             ignoreAreas: trackOptions.ignoreAreas,
             comment: trackOptions.comment,
@@ -258,11 +263,12 @@ describe("playwright", () => {
         expect(VisualRegressionTracker.prototype.track).toHaveBeenCalledWith(
           {
             name: imageName,
-            imageBase64: screenshot.toString("base64"),
+            imageBuffer: screenshot,
             browser: browserName,
             viewport: undefined,
             os: undefined,
             device: undefined,
+            customTags: undefined,
             diffTollerancePercent: undefined,
             comment: undefined,
           },

@@ -11,6 +11,7 @@ interface BaseTrackOptions {
   diffTollerancePercent?: number;
   ignoreAreas?: IgnoreArea[];
   agent?: Agent;
+  customTags?: string;
   comment?: string;
 }
 

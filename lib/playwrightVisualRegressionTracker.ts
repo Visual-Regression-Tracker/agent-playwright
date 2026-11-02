@@ -45,15 +45,14 @@ export class PlaywrightVisualRegressionTracker {
     return this.vrt.track(
       {
         name,
-        imageBase64: (
-          await page.screenshot(options?.screenshotOptions)
-        ).toString("base64"),
+        imageBuffer: await page.screenshot(options?.screenshotOptions),
         browser: this.browser,
         viewport: viewportSize
           ? `${viewportSize.width}x${viewportSize.height}`
           : undefined,
         os: options?.agent?.os,
         device: options?.agent?.device,
+        customTags: options?.customTags,
         diffTollerancePercent: options?.diffTollerancePercent,
         ignoreAreas: options?.ignoreAreas,
         comment: options?.comment,
@@ -74,13 +73,12 @@ export class PlaywrightVisualRegressionTracker {
     return this.vrt.track(
       {
         name,
-        imageBase64: (
-          await elementHandle.screenshot(options?.screenshotOptions)
-        ).toString("base64"),
+        imageBuffer: await elementHandle.screenshot(options?.screenshotOptions),
         browser: this.browser,
         viewport: options?.agent?.viewport,
         os: options?.agent?.os,
         device: options?.agent?.device,
+        customTags: options?.customTags,
         diffTollerancePercent: options?.diffTollerancePercent,
         ignoreAreas: options?.ignoreAreas,
         comment: options?.comment,
