@@ -45,6 +45,11 @@ const config: Config = {
   // Required
   branchName: "develop",
 
+  // Branch to take baselines from instead of the project's main branch
+  // Optional - default is the project's main branch
+  // Also read from VRT_SOURCEBRANCH when not set here
+  sourceBranch: "release",
+
   // Log errors instead of throwing exceptions
   // Optional - default false
   enableSoftAssert: true,
@@ -70,6 +75,7 @@ _Is overriden if ENV variables are present_
   "apiKey": "tXZVHX0EA4YQM1MGDD",
   "ciBuildId": "commit_sha",
   "branchName": "develop",
+  "sourceBranch": "release",
   "enableSoftAssert": false
 }
 ```
@@ -84,8 +90,14 @@ VRT_PROJECT="Default project"
 VRT_APIKEY="tXZVHX0EA4YQM1MGDD"
 VRT_CIBUILDID="commit_sha"
 VRT_BRANCHNAME="develop"
+VRT_SOURCEBRANCH="release"
 VRT_ENABLESOFTASSERT=true
 ```
+
+`sourceBranch` replaces `baselineBranchName` (`VRT_BASELINEBRANCHNAME`), which
+the server never read. The old name still works as an alias and logs a
+deprecation warning; like the other `VRT_*` variables, `VRT_BASELINEBRANCHNAME`
+is read only when no explicit config is passed.
 
 ### Setup
 
