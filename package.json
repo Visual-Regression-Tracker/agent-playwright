@@ -1,9 +1,12 @@
 {
   "name": "@visual-regression-tracker/agent-playwright",
-  "version": "5.0.0",
+  "version": "0.0.0-development",
   "description": "Native integration for Playwright with Visual Regression Tracker",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit",
     "test:cov": "jest --collectCoverage --detectOpenHandles --forceExit",
