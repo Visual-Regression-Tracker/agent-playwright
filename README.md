@@ -78,13 +78,14 @@ await vrt.trackElementHandle(page.locator("h1"), "Heading", {
 await vrt.stop();
 ```
 
-`trackPage(page, name, options, retryCount)` and `trackElementHandle(elementHandleOrLocator, name, options, retryCount)` take the screenshot and track it.
+`trackPage(page, name, options, retryCount)` and `trackElementHandle(elementHandleOrLocator, name, options, retryCount)` take the screenshot and upload it as multipart, so the server's JSON body limit does not apply.
 `retryCount` is how many more times to submit the same screenshot while the result is `unresolved`. The default is 2.
 Every option is optional:
 
 | Option | Description |
 | --- | --- |
 | `agent.os`, `agent.device`, `agent.viewport` | Tell baselines of the same name apart; `trackPage` takes the viewport from the page |
+| `customTags` | Tells baselines of the same name apart, e.g. `"smoke,dark"` |
 | `diffTollerancePercent` | Allowed difference, in percent of all pixels (the spelling is the API's) |
 | `ignoreAreas` | `[{ x, y, width, height }]` in pixels, left out of the comparison |
 | `comment` | Shown with the test run |
