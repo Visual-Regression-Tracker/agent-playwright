@@ -41,6 +41,13 @@
     "vitest": "^5.1.0"
   },
   "release": {
+    "branches": [
+      "master",
+      {
+        "name": "next",
+        "prerelease": "rc"
+      }
+    ],
     "preset": "conventionalcommits"
   }
 }
