@@ -7,7 +7,7 @@ Tracks [Playwright](https://playwright.dev) page and element screenshots. The ag
 ## Requirements
 
 - `@playwright/test` 1.x
-- Node.js 18 or later
+- Node.js 26 or later
 - Visual Regression Tracker server 5.0.8 or later; 6 is recommended
 
 ## Install
